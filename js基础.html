@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>js基础</title>
+  </head>
+  <body>
+    <h1>js基础</h1>
+  </body>
+  <script>
+    console.log("深拷贝");
+    const obj1 = {
+      name: "张三",
+      age: 20,
+    };
+    const obj2 = {
+      name: "李四",
+      age: 18,
+    };
+
+    const obj3 = obj1;
+    obj3.name = "刘德华"; //赋值,浅拷贝
+    console.log("obj1", obj1);
+    console.log("obj3", obj3);
+
+    const obj4 = { ...obj2 };
+    obj4.name = "李宗盛"; //赋值,深拷贝
+    console.log("obj4", obj4);
+    console.log("obj2", obj2);
+
+    var Animal = function(name) {
+      this.name = name;
+    };
+    //实例化对象
+    var dog = new Animal("大黄");
+    console.dir(Animal); //(输出的是构造函数的名字)
+    console.dir(dog); //(实例对象)
+  </script>
+</html>

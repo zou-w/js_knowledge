@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function Person(name, age) {
+        this.name = name;
+        this.age = age;
+        this.sayHello = () => {
+          console.log(this.name + " say hello");
+        };
+      }
+      const person1 = new Person("jack", 20);
+      person1.sayHello();
+      //constructor 的作用
+      console.log(person1.constructor === Person);
+      const person2 = new person1.constructor();
+      //instanceof 的作用
+      console.log(person2 instanceof Person);
+      //利用原型,在构造函数上添加方法
+      Person.prototype.sayAge = function () {
+        return this.age;
+      };
+      console.log(person1.sayAge());
+
+      //类
+      console.log("------类相关------");
+      class aPerson {
+        constructor(name) {
+          this.name = name;
+        }
+        sayName() {
+          return this.name;
+        }
+      }
+      const chen = new aPerson("chen");
+      console.log(chen.sayName());
+
+      //继承 派生类
+      class aPerson1 {
+        constructor([name, age] = props) {
+          this.name = name;
+          this.age = age;
+        }
+        sayHi() {
+          return `Hi,my name is ${this.name},and my age is ${this.age}`;
+        }
+      }
+      //Player是派生类,继承aPerson1的新类
+      //派生类:继承自其他类的新类
+      class Player extends aPerson1 {
+        constructor(props) {
+          //构造函数中访问this之前要待用super(),负责初始化this
+          super(props);
+          //this.age = 1;
+        }
+        // 重写add方法，求积
+        sayHi() {
+          return `my name is${this.name},${this.age}`;
+        }
+      }
+      let lay = new Player(["lay", 20]);
+      let wen = new aPerson1(["wen", 21]);
+      console.log(wen.sayHi());
+      console.log(lay.sayHi());
+    </script>
+  </body>
+</html>

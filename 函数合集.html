@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button class="clickMe">点我</button>
+    <button class="clickMe1">点我</button>
+    <input type="text" class="write" />
+    <script>
+      const clickMe = document.querySelector(".clickMe");
+      const clickMe1 = document.querySelector(".clickMe1");
+      const write = document.querySelector(".write");
+      clickMe1.addEventListener("click", () => {
+        console.log(1);
+      });
+      console.log(clickMe);
+      console.log(clickMe1);
+
+      //惰性函数
+      //常见的为 DOM 节点添加事件的函数
+      function addEvent(type, element, func) {
+        if (element.addEventListener) {
+          element.addEventListener(type, func, false);
+        } else if (element.attachEvent) {
+          element.attachEvent("on" + type, func);
+        } else {
+          element["on" + type] = func;
+        }
+      }
+      function clicked() {
+        console.log("点击");
+      }
+      addEvent("click", clickMe, clicked());
+
+      //函数重写
+      function foo() {
+        console.log("foo");
+
+        foo = function () {
+          console.log("bar");
+        };
+      }
+      foo(); //foo
+      foo(); //bar
+
+      //级联函数
+      //只需要在每个函数中返回 this 对象
+      function Person() {
+        this.name = "";
+        this.age = 0;
+        this.weight = 10;
+      }
+      Person.prototype = {
+        setName: function (name) {
+          this.name = name;
+          return this;
+        },
+        setAge: function (age) {
+          this.age = age;
+          return this;
+        },
+        setWeight: function (weight) {
+          this.weight = weight;
+          return this;
+        },
+      };
+
+      var wen = new Person();
+      wen.setName("wen").setAge(21).setWeight(115);
+      console.log(wen);
+
+      //回调函数
+      function add(num1, num2, callback) {
+        const sum = num1 + num2;
+        callback(sum);
+      }
+      function print(sum) {
+        console.log(sum);
+        console.log("@", this); //window
+      }
+      add(1, 2, print);
+      //匿名回调函数
+      function add(num1, num2, callback) {
+        const sum = num1 + num2;
+        callback(sum);
+      }
+      add(1, 2, function (sum) {
+        console.log(sum);
+      });
+      add(1, 2, (sum) => {
+        console.log(sum);
+      });
+
+      //高阶函数
+      const search = (name, time, callback) => {
+        function changeName(name) {
+          name = "李四";
+          return name;
+        }
+        setTimeout(() => {
+          callback(changeName());
+        }, time);
+      };
+      function clgName(name) {
+        console.log(name);
+      }
+      search("张三", 1000, clgName);
+
+      //AOP:把一些跟核心业务逻辑模块无关的功能抽离出去
+      function service() {
+        name = "功能逻辑";
+        return name;
+      }
+
+      function proxyMethod() {
+        let startTime;
+        _this = this; //解决this指向问题
+        return {
+          before: function () {
+            _this.startTime = new Date();
+            console.log("计时开始");
+          },
+
+          after: function () {
+            setTimeout(() => {
+              endTime = new Date() - _this.startTime;
+              console.log("计时结束,用时", +endTime);
+            }, 1000);
+          },
+        };
+      }
+
+      const aop = (fn, proxy) => {
+        //调用函数,然后返回一个函数
+        proxy().before();
+        fn();
+        console.log(name);
+        proxy().after();
+      };
+      aop(service, proxyMethod);
+
+      //函数柯里化
+      //一般写法
+      const sum3 = (x, y, z) => {
+        return x + y + z;
+      };
+      console.log(sum3(1, 2, 3));
+      //柯里化写法
+      const sum4 = (x) => {
+        return function (y) {
+          return function (z) {
+            return x + y + z;
+          };
+        };
+      };
+      console.log(sum4(1)(2)(3));
+
+      //函数防抖(回城)
+      function debounce(fun, delay) {
+        return function (args) {
+          let that = this;
+          let _args = args;
+          clearTimeout(fun.id);
+          fun.id = setTimeout(function () {
+            fun.call(that, _args);
+          }, delay);
+        };
+      }
+      function ajax(content) {
+        console.log(content);
+      }
+      let debounceAjax = debounce(ajax, 1000);
+      write.addEventListener("keyup", (e) => {
+        debounceAjax(e.target.value);
+        // throttleAjax(e.target.value);
+      });
+
+      //节流(放技能)
+      function throttle(fun, delay) {
+        let last, deferTimer;
+        return function (args) {
+          let that = this;
+          let _args = arguments;
+          let now = +new Date();
+          if (last && now < last + delay) {
+            clearTimeout(deferTimer);
+            deferTimer = setTimeout(function () {
+              last = now;
+              fun.apply(that, _args);
+            }, delay);
+          } else {
+            last = now;
+            fun.apply(that, _args);
+          }
+        };
+      }
+      let throttleAjax = throttle(ajax, 2000);
+
+      //函数记忆
+      function memorize(fn) {
+        var cache = {};
+        return function () {
+          console.log(cache);
+          var key = Array.prototype.join.call(arguments, ",");
+          if (key in cache) {
+            return cache[key];
+          } else {
+            return (cache[key] = fn.apply(this, arguments));
+          }
+        };
+      }
+      var add = function (a, b, c) {
+        return a + b + c;
+      };
+      var memorizeAdd = memorize(add);
+      console.log(memorizeAdd(9, 9, 9));
+      console.log(memorizeAdd(9, 9, 8));
+      console.log(memorizeAdd(9, 9, 9));
+
+      //函数睡眠
+      const sleep = (cb, time) => setTimeout(cb, time);
+      sleep(() => {
+        console.log("Hello world!");
+      }, 1000);
+    </script>
+  </body>
+</html>
