@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script type="text/javascript" src="module1.js"></script>
+    <script type="text/javascript" src="module2.js"></script>
+    <script>
+      //单例模式
+      moduleOne.foo();
+      moduleOne.bar();
+
+      moduleTwo.foo();
+      moduleTwo.bar();
+
+      moduleOne.data = "update data";
+      moduleOne.foo();
+      moduleOne.bar();
+
+      //IIFE模式
+      module.foo1();
+      module.bar1();
+      //module.otherFun1(); //报错，module.otherFun is not a function
+
+      foo3();
+      bar3();
+      console.log(data3);
+    </script>
+    <!-- es6 -->
+    <script type="module">
+      // import { default as newModule } from "./module3.js";
+      import esModule from "./module3.js";
+      esModule.add(9, 9);
+      esModule.sum(9, 9);
+      //newModule.add(9,9)
+      //newModule.sum(9,9)
+    </script>
+  </body>
+</html>

@@ -180,3 +180,169 @@ function service() {
 #### 12.偏函数
 
 **固定一个函数的一些参数，然后产生另一个更小元的函数。**
+
+## 4.模块化
+
+把复杂的系统分解到多个模块以方便解码
+
+### 1.单例模式
+
+**简单封装对象:减少全局变量**
+
+**但是可以直接修改模块内部数据**
+
+### 2.IIFE模式
+
+**匿名函数自调用(闭包)**
+
+**数据是私有的,外部只能通过暴露的方法操作数据**
+
+### 3.CommonJS
+
+**引入方式:`require`**
+
+**暴露方式:`module.export`或`exports`**
+
+**`module.exports` 和 `exports` 的区别：**
+
+在Node.js中,module是一个全局变量,类似于浏览器端的window
+
+**引入模块:**
+
+- `require(url)`  (url为路径参数)
+- 路径:`./`或者`../`
+- 第三方模块/内置模块/核心模块:路径直接使用模块名称
+
+**暴露模块:**
+
+- `exports`
+- `module.exports`
+
+### 4.AMD(异步模块)(主要是在浏览器使用)
+
+**非同步加载模块,允许指定回调函数**
+
+**特点:**
+
+- 异步加载依赖的模块
+- 可在不转换代码的情况下直接在浏览器运行
+- 并行加载多个模块
+- 可运行在浏览器和Node环境
+
+**暴露模块:**
+
+- 在模块内部使用`return`
+
+**定义模块:**
+
+- `define(['模块名'],function(模块暴露内容){})`
+- `require(['模块名'], function (模块暴露内容) {})`
+- 在模块内部可以使用`require`定义异步模块
+
+**主模块:**
+
+- `requirejs.config({})`配置使用的模块路径
+- `requirejs(['模块名'],function(模块暴露内容){})
+
+**HTML文件引入`<script>`标签:**
+
+- `<script data-main='app.js' src='require.js'></script>`
+
+### 5.CMD(通用模块定义)
+
+**CommonJS 和 AMD 基础上提出的**
+
+**特点：**
+
+- 异步加载，有缓存
+
+### 6. ES6 Module
+
+**特点：**
+
+- 动态引入（按需加载），没有缓存
+
+**引入模块`import`:**
+
+- 统一暴露：`import {模块暴露的内容} from '模块路径'`
+
+```js
+import { originModule } from './module.js'
+
+// React Hook
+import { useState, useEffect } from 'react'
+```
+
+- 分别暴露：`import * as m1 from './module1'`
+
+  ```js
+  //将源模块中的所有内容作为对象导入，将所有源模块的命名导出公开为属性和方法。默认导出被排除在此对象之外
+  
+  import * as module from './module.js'
+  //module.originModule
+  ```
+
+  ```js
+  //从源模块导入特定项，并在导入时指定自定义名称。使用关键字 as，将输入的变量重命名。
+  
+  import { originMoudle as newMoudleName } from './module.js'
+  ```
+
+  
+
+  - 这两者暴露的本质是对象，接收的时候只能以对象的解构赋值的方式来接收值
+
+- 默认暴露：直接使用 `import 模块暴露的内容 from '模块路径'`。默认暴露，暴露任意数据类型，暴露什么数据类型，接收什么数据类型。
+
+  ```js
+  import module from './module.js'
+  ```
+
+- 空的导入:加载模块代码,但不创建新对象
+
+  ```js
+  import './module.js'
+  ```
+
+**暴露模块使用 `export`**:
+
+- 分别暴露 
+
+  ```js
+  const originModule = true;
+  
+  export { originModule };
+  ```
+
+  ```js
+  //在导出时重命名：
+  export { foo as newFoo } from 'module'
+  export { originModule as smartModule };
+  ```
+
+  ```js
+  //声明后立即导出：
+  export var something = true;
+  export function everything (){}
+  export class interesting = true;
+  ```
+
+- 统一暴露 
+
+- 默认暴露 （默认导出的变量无法使用命名导入）
+
+  ```js
+  export default something;
+  export { default } from 'module'
+  ```
+
+**ES6的模块自动采用严格模式**
+
+### 7.模块继承
+
+```js
+// children.js
+
+export * from 'parent'
+```
+
