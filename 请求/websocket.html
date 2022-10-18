@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input class="input1" placeholder="输入名字" />
+    <input class="input2" placeholder="输入内容" />
+    <button class="start">开始聊天</button>
+    <button class="quit">退出聊天</button>
+    <button class="send">发送消息</button>
+    <script>
+      const name = document.querySelectorAll(".input1");
+      const content = document.querySelectorAll(".input2");
+      const start = document.querySelectorAll(".start");
+      const send = document.querySelectorAll(".send");
+      const quit = document.querySelectorAll(".quit");
+      let user = "";
+      let message = {
+        msg: "",
+        time: null,
+        to: "",
+        from: "",
+      };
+      name[0].onblur = () => {
+        user = name[0].value;
+        console.log(user);
+      };
+      content[0].onblur = () => {
+        message.msg = content[0].value;
+        console.log("chat: ", message);
+      };
+      start[0].onclick = () => {
+        let socketUrl = "ws://localhost:8888/socket/" + user;
+        //开启socket服务
+        socket = new WebSocket(socketUrl);
+        //打开事件
+        socket.onopen = () => {
+          console.log("websocket服务已经开启");
+        };
+        socket.onmessage = (msg) => {
+          console.log("收到的数据", JSON.parse(msg.data));
+        };
+        socket.onclose = () => {
+          console.log("websocket服务已经关闭");
+        };
+        socket.onerror = () => {
+          console.log("服务发生错误");
+        };
+      };
+      send[0].onclick = () => {
+        //发送消息
+        message.from = user;
+        message.time = new Date().toLocaleTimeString();
+        socket.send(JSON.stringify(message));
+        content[0].value = "";
+      };
+      quit[0].onclick = () => {
+        console.log("执行退出");
+        socket.close(1000, "退出聊天");
+      };
+    </script>
+  </body>
+</html>

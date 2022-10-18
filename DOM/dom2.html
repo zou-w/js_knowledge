@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .content {
+        height: 100px;
+        width: 100px;
+        background-color: fff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="content">内容</div>
+    <button class="btn">按钮</button>
+    <button class="btn1">按钮1</button>
+    <script>
+      //更改样式
+      const colorArray = ["yellow", "red", "blue"];
+      let i = 0;
+      let d = 1;
+      const content = document.querySelectorAll(".content");
+      const btn = document.querySelectorAll(".btn");
+      const btn1 = document.querySelectorAll(".btn1");
+      console.log(btn);
+      btn[0].onclick = () => {
+        if (i === colorArray.length) {
+          i = 0;
+        }
+        content[0].style.cssText = `
+      background-color:${colorArray[i]};
+      height:${d * 100}px;
+      width:${d * 100}px
+      `;
+        i++;
+        d++;
+      };
+      btn1[0].onclick = () => {
+        content[0].style.cssText = `
+        background-color:#fff;
+      height:100px;
+      width:100}px
+        `;
+        i = 0;
+        d = 1;
+      };
+    </script>
+  </body>
+</html>
