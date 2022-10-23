@@ -30,12 +30,72 @@
     console.log("obj4", obj4);
     console.log("obj2", obj2);
 
-    var Animal = function(name) {
+    var Animal = function (name) {
       this.name = name;
     };
     //实例化对象
     var dog = new Animal("大黄");
     console.dir(Animal); //(输出的是构造函数的名字)
     console.dir(dog); //(实例对象)
+
+    //call,bind,apply使用及区别
+    //类数组借用:
+    var arrayLike = {
+      0: "OB",
+      1: "Korol",
+      length: 2, //不能省
+    };
+    Array.prototype.push.call(arrayLike, "1号", "2号");
+    console.log(arrayLike);
+    //apply获取数组最大值,最小值
+    const arr = [15, 6, 12, 13, 16];
+    const max = Math.max.apply(Math, arr);
+    const min = Math.min.apply(Math, arr);
+    console.log(max);
+    console.log(min);
+    //1.call
+    function aFn() {
+      console.log(this.name);
+    }
+
+    let Obj5 = {
+      name: "aaaa",
+    };
+
+    //隐式绑定
+    //函数,作为对象的属性,由对象调用
+    //改变this
+
+    let obj6 = {
+      name: "bbbbb",
+    };
+    function bFn() {
+      console.log(this);
+      console.log(this.name);
+    }
+    obj6.fn = bFn;
+    obj6.fn();
+
+    //解构赋值
+    //数组
+    let arr1 = ["孙悟空", "猪八戒"];
+    // let a, b;
+    // [a, b] = arr1;
+    // const [a, b] = arr1;
+
+    const [a, b, , c] = ["孙悟空", "猪八戒", "唐僧", "沙和尚"];
+    console.log(a, c);
+
+    //交换变量的位置
+    //[a,b] = [b,a]
+
+    //对象
+    const obj7 = {
+      name: "孙悟空",
+      age: 21,
+      gender: "男",
+    };
+    const { name, age, gender } = obj7;
+    console.log(name, age, gender);
   </script>
 </html>

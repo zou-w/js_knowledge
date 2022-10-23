@@ -8,10 +8,47 @@
   </head>
   <body>
     <script>
-      const Foo = function () {};
-      const foo = new Foo();
+      class Person {
+        constructor(name, age) {
+          this.name = name;
+          this.age = age;
+        }
+        introduce() {
+          console.log(`我的名字是${this.name},我都年龄是${this.age}`);
+        }
+      }
+      class Teacher extends Person {
+        constructor(name, age, subject) {
+          super(name, age);
+          this.subject = subject;
+        }
+        teach() {
+          console.log(`我叫${this.name},我教${this.subject}`);
+        }
+      }
+      class Student extends (Person, Teacher) {
+        constructor(name, age, score) {
+          super(name, age);
+          this.score = score;
+        }
+        learn() {
+          console.log(`我叫${this.name},我考了${this.score}分`);
+        }
+      }
+      let student = new Student("张三", 18, 99);
+      let teacher = new Teacher("李四", 40, "计算机");
+      student.introduce();
+      teacher.teach();
+      console.log(student.__proto__);
+      console.log(Student.prototype);
+      console.log(Student.prototype.__proto__);
+      console.log(student.__proto__ === Student.prototype);
 
-      console.log(foo.__proto__); // 构造函数 Foo {} 是函数 foo 的原型对象
+      Function.prototype.myCall = function () {
+        console.log("@,myCall");
+      };
+      Function.myCall();
+      console.log(Function.myCall.prototype);
     </script>
   </body>
 </html>

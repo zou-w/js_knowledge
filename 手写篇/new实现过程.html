@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      class Teacher {
+        constructor(name, age) {
+          this.name = name;
+          this.age = age;
+        }
+        say() {
+          console.log(this.name);
+        }
+      }
+      let teacher = new Teacher("张三", 20);
+      teacher.say();
+
+      function myNew1(fn, ...args) {
+        let newObj1 = Object.create(fn.prototype);
+        let res = fn.apply(newObj1, args);
+        return typeof res === "object" ? res : newObj1;
+      }
+
+      function myNew(fn, ...args) {
+        let newObj = Object.create(fn.prototype);
+        let res = fn.apply(newObj, args);
+        return typeof res === "object" ? res : newObj;
+      }
+      function Student(name, age) {
+        this.name = name;
+        this.age = age;
+      }
+      Student.prototype.say = function () {
+        console.log(this.name);
+      };
+      let student = myNew(Student, "李四", 50);
+      student.say();
+    </script>
+  </body>
+</html>
